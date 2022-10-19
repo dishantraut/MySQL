@@ -20,7 +20,7 @@ SELECT CalcIncome (1000);
 DROP FUNCTION CalcIncome;
 
 
--- ##############################################################
+-- * ##############################################################
 
 
 DELIMITER $$
@@ -39,7 +39,7 @@ END$$
 DELIMITER ;
 
 
--- ##############################################################
+-- * ##############################################################
 
 
 DROP FUNCTION IF EXISTS BrandName;
@@ -69,12 +69,46 @@ SELECT BrandName('8051');
 SELECT BrandName('2002');
 
 
--- ##############################################################
+-- * ##############################################################
+
+
+DROP FUNCTION IF EXISTS SwitchName;
+DELIMITER $$
+CREATE FUNCTION SwitchName(aid VARCHAR(4), chName VARCHAR(6)) RETURNS VARCHAR(100)
+DETERMINISTIC
+COMMENT '
+# Func Name :- SwitchName
+# Created By :- Dishant Raut [15Sep2022]
+# Updated By :- Dishant Raut [15Sep2022]
+# Params :- AcquiringInstitutionIdentification + ChannelType
+# Desc :- Get Name Of Switch
+# Exec :- SELECT SwitchName("8051");
+# Drop :- DROP FUNCTION IF EXISTS SwitchName;
+'
+BEGIN
+    DECLARE switchName VARCHAR(100);
+    IF aid = '0012' AND chName = 'GPMPOS' THEN SET switchName = 'GeoPagos SmartPOS';
+    ELSEIF aid = '0012' AND chName = 'GPGMVP'  THEN SET switchName = 'Geopagos MPOS';
+    ELSEIF aid = '0012' AND chName = 'GPLINK'  THEN SET switchName = 'Geopagos Payment Link';
+    ELSEIF aid = '2003' AND chName = 'DA'  THEN SET switchName = 'Digital Acquirer';
+    ELSEIF aid = '0014' AND chName = 'ALVI'  THEN SET switchName = 'Alvi SMU';
+    END IF;
+	RETURN (switchName);
+END$$
+DELIMITER ;
+SELECT SwitchName('0012', 'GPMPOS');
+SELECT SwitchName('0012', 'GPGMVP');
+SELECT SwitchName('0012', 'GPLINK');
+SELECT SwitchName('2003', 'DA');
+SELECT SwitchName('0014', 'ALVI');
+
+
+-- * ##############################################################
 
 
 DROP FUNCTION IF EXISTS BankNameOnBankCode;
 DELIMITER $$
-CREATE FUNCTION BankNameOnBankCode(bankCode VARCHAR(4)) RETURNS VARCHAR(30)
+CREATE FUNCTION BankNameOnBankCode(bankCode VARCHAR(4)) RETURNS VARCHAR(50)
 DETERMINISTIC
 COMMENT '
 # Func Name :- BankNameOnBankCode
@@ -86,7 +120,7 @@ COMMENT '
 # Drop :- DROP FUNCTION IF EXISTS BankNameOnBankCode;
 '
 BEGIN
-    DECLARE bankName VARCHAR(20);
+    DECLARE bankName VARCHAR(50);
     IF bankCode = '009' THEN SET bankName = 'BANCO INTERNACIONAL';
     ELSEIF bankCode = '014' THEN SET bankName = 'SCOTIABANK CHILE';
     ELSEIF bankCode = '016' THEN SET bankName = 'BANCO DE CREDITO E INVERSIONES';
@@ -116,7 +150,7 @@ DELIMITER ;
 SELECT BankNameOnBankCode('012');
 
 
--- ##############################################################
+-- * ##############################################################
 
 
 DROP FUNCTION IF EXISTS TransactionType;
@@ -150,7 +184,7 @@ DELIMITER ;
 SELECT TransactionType('0210', '200000')
 
 
--- ##############################################################
+-- * ##############################################################
 
 
 DROP FUNCTION IF EXISTS ResponseCodeDescription;
